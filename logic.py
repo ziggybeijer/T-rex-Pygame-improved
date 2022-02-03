@@ -1,12 +1,13 @@
 import pygame, pygame_menu
-import main
+import texturer
 
-weGo = main.clock
 
-def change_difficulty(difficulty_modifier):
+def change_difficulty(difficulty_modifier, clock):
     # maths for difficulty
     modifier = 0.5
     if modifier is not None:
         modifier = difficulty_modifier
-    movementSpeed = lambda x: (modifier*100)-70*(main.clock/30) if main.clock/300 >= 1 else (modifier*100)-70
+    return modifier
+
+# movementSpeed = lambda x: (modifier*100)-70*(clock/30) if clock/300 >= 1 else (modifier*100)-70
 

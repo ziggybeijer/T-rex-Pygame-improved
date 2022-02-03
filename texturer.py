@@ -1,6 +1,8 @@
-from PIL import Image
+import pathlib
+import pygame, pygame_menu
 
-# initialise variables to be global
+
+# initialise variables
 player_init = "hello world"
 player_frame_1 = None
 player_frame_2 = None
@@ -17,9 +19,10 @@ obstacle_4 = None
 ground = None
 
 
+# set textures for objects
 def set_textures(folderName):
     global player_init
-    player_init = Image.open("{foldername}\\player.png".format(foldername=folderName)).convert("RGBA")  # player start position
+    player_init = Image.open("{foldername}\\player.png".format(foldername=folderName)).convert("RGBA")  # player start
     global player_frame_1
     global player_frame_2
     global player_frame_3
