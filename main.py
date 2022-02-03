@@ -22,6 +22,7 @@ displayGame = pygame.display.set_mode((sizeX, sizeY), pygame.RESIZABLE)
 pygame.display.set_caption('The Amazing T-rex Runner', 'The Amazing T-rex Game')
 clock = pygame.time.Clock()
 
+# TODO: maybe move all the menu code to a separate file for better organisation
 # menus
 # make font
 PressStartFont = pygame.font.Font(pathlib.Path('dependencies/font/PressStart2P-Regular.ttf'), 7)
@@ -45,6 +46,7 @@ optionsMenu = pygame_menu.menu.Menu(
     theme=menuTheme
 )
 # make buttons for mainMenu
+# TODO: continue on menu layout and logic
 mainMenu.add.selector('Difficulty :', [('Hard', 1), ('Easy', 2)])
 mainMenu.add.button(optionsMenu.get_title(), optionsMenu)
 mainMenu.add.button('Play', None)
