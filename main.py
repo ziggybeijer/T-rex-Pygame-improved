@@ -5,7 +5,6 @@ import logic
 import ctypes
 
 pygame.init()
-speed = 4
 hovered = False
 
 # basic game window
@@ -15,8 +14,8 @@ screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 sizeX, sizeY = screensize
 sizeY = sizeY - sizeY * 0.04166666666666666666666666666667
 # size for menus
-menuSizeX = sizeX * 0.3
-menuSizeY = sizeY * 0.3
+menuSizeX = sizeX * 0.5
+menuSizeY = sizeY * 0.5
 # initialise game window
 displayGame = pygame.display.set_mode((sizeX, sizeY), pygame.RESIZABLE)
 pygame.display.set_caption('The Amazing T-rex Runner', 'The Amazing T-rex Game')
@@ -29,15 +28,21 @@ PressStartFont = pygame.font.Font(pathlib.Path('dependencies/font/PressStart2P-R
 # menu theme
 menuTheme = pygame_menu.themes.Theme(
     background_color=(0, 0, 0, 0),
-    title_background_color=(90, 10, 3),
+    title_background_color=(0, 0, 0),
     title_font=(pathlib.Path('dependencies/font/PressStart2P-Regular.ttf')),
     widget_font=(pathlib.Path('dependencies/font/PressStart2P-Regular.ttf')),
+    title_font_color=(38, 38, 38),
+    widget_font_color=(38, 38, 38),
+    cursor_selection_color=(0, 0, 255),
+    selection_color=(0, 255, 0),
+    title_font_size=30
 )
 # main menu
 mainMenu = pygame_menu.Menu(
     'T-rex runner The Game',
     menuSizeX, menuSizeY,
-    theme=menuTheme
+    theme=menuTheme,
+    mouse_motion_selection=True,
 )
 # options menu
 optionsMenu = pygame_menu.menu.Menu(
@@ -45,21 +50,37 @@ optionsMenu = pygame_menu.menu.Menu(
     menuSizeX, menuSizeY,
     theme=menuTheme
 )
+
+
 # make buttons for mainMenu
 # TODO: continue on menu layout and logic
-mainMenu.add.selector('Difficulty :', [('Hard', 1), ('Easy', 2)])
-mainMenu.add.button(optionsMenu.get_title(), optionsMenu)
 mainMenu.add.button('Play', None)
+mainMenu.add.none_widget('')
+mainMenu.add.button(optionsMenu.get_title(), optionsMenu)
 mainMenu.add.button('Quit', pygame_menu.events.EXIT)
 # make buttons for optionsMenu
-optionsMenu.add.selector
+optionsMenu.add.none_widget('')
+difficultySelect = optionsMenu.add.dropselect(
+    title='Difficulty',
+    items=[
+        ('Easy', 0),
+        ('Medium', 1),
+        ('Hard', 2),
+        ('Extreme', 3)
+    ],
+    font_size=30,
+    onchange=logic.setmodifier
+)
+print(difficultySelect)
+optionsMenu.add.button('Hard', logic.setmodifier, 1)
 
 
 # draws menu background
 def draw_background():
-    background = pygame.image.load(pathlib.Path('dependencies/images/Lorem_Ipsum.jpg'))
-    background = pygame.transform.scale(background, (sizeX, sizeY))
-    displayGame.blit(background, (0, 0))
+    # background = pygame.image.load(pathlib.Path('dependencies/images/Lorem_Ipsum.jpg'))
+    # background = pygame.transform.scale(background, (sizeX, sizeY))
+    # displayGame.blit(background, (0, 0))
+    displayGame.fill((255, 255, 255))
 
 # set textures according to menu
 # texturer.set_textures(textureName)
