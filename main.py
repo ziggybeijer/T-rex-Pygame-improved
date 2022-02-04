@@ -5,7 +5,8 @@ import logic
 import ctypes
 
 pygame.init()
-hovered = False
+clock = pygame.time.Clock()
+clockAbsolute = 0
 
 # basic game window
 # get screen size for different screen sizes
@@ -19,7 +20,6 @@ menuSizeY = sizeY * 0.5
 # initialise game window
 displayGame = pygame.display.set_mode((sizeX, sizeY), pygame.RESIZABLE)
 pygame.display.set_caption('The Amazing T-rex Runner', 'The Amazing T-rex Game')
-clock = pygame.time.Clock()
 
 # TODO: maybe move all the menu code to a separate file for better organisation
 # menus
@@ -28,14 +28,18 @@ PressStartFont = pygame.font.Font(pathlib.Path('dependencies/font/PressStart2P-R
 # menu theme
 menuTheme = pygame_menu.themes.Theme(
     background_color=(0, 0, 0, 0),
-    title_background_color=(0, 0, 0),
+    title_background_color=(0, 0, 0, 0),
     title_font=(pathlib.Path('dependencies/font/PressStart2P-Regular.ttf')),
     widget_font=(pathlib.Path('dependencies/font/PressStart2P-Regular.ttf')),
     title_font_color=(38, 38, 38),
     widget_font_color=(38, 38, 38),
-    cursor_selection_color=(0, 0, 255),
-    selection_color=(0, 255, 0),
-    title_font_size=30
+    selection_color=(10, 10, 10),
+    title_font_size=70,
+    widget_background_color=(0, 0, 0, 0),
+    title_close_button_background_color=(10, 10, 10),
+    title_offset=(-100, 0),
+    title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_UNDERLINE_TITLE,
+    widget_alignment=pygame_menu.locals.ALIGN_LEFT,
 )
 # main menu
 mainMenu = pygame_menu.Menu(
@@ -43,6 +47,7 @@ mainMenu = pygame_menu.Menu(
     menuSizeX, menuSizeY,
     theme=menuTheme,
     mouse_motion_selection=True,
+
 )
 # options menu
 optionsMenu = pygame_menu.menu.Menu(
@@ -55,12 +60,12 @@ optionsMenu = pygame_menu.menu.Menu(
 # make buttons for mainMenu
 # TODO: continue on menu layout and logic
 mainMenu.add.button('Play', None)
-mainMenu.add.none_widget('')
+mainMenu.add.button('')
 mainMenu.add.button(optionsMenu.get_title(), optionsMenu)
 mainMenu.add.button('Quit', pygame_menu.events.EXIT)
 # make buttons for optionsMenu
 optionsMenu.add.none_widget('')
-difficultySelect = optionsMenu.add.dropselect(
+optionsMenu.add.dropselect(
     title='Difficulty',
     items=[
         ('Easy', 0),
@@ -71,8 +76,6 @@ difficultySelect = optionsMenu.add.dropselect(
     font_size=30,
     onchange=logic.setmodifier
 )
-print(difficultySelect)
-optionsMenu.add.button('Hard', logic.setmodifier, 1)
 
 
 # draws menu background
@@ -93,6 +96,9 @@ def draw_background():
 while True:
     draw_background()
     events = pygame.event.get()
+    clock.tick()
+    clockAbsolute = clockAbsolute + clock.get_time()
+
     for event in events:
         if event.type == pygame.QUIT:
             exit()
