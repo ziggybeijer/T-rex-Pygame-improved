@@ -1,19 +1,30 @@
-import pathlib
-import pygame, pygame_menu
-import texturer
-import logic
 import ctypes
+import pathlib
+
+import pygame
+import pygame_menu
+
+import logic
 
 pygame.init()
 clock = pygame.time.Clock()
 clockAbsolute = 0
 
-# basic game window
+
+# draws menu background
+def draw_background():
+    background = pygame.image.load(pathlib.Path('dependencies/images/dino-game-background.png'))
+    background = pygame.transform.scale(background, (sizeX, sizeY))
+    displayGame.blit(background, (0, 0))
+    # displayGame.fill((255, 255, 255))
+
+
+# basic variables
 # get screen size for different screen sizes
 user32 = ctypes.windll.user32
 screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 sizeX, sizeY = screensize
-sizeY = sizeY - sizeY * 0.04166666666666666666666666666667
+sizeY = sizeY - sizeY * 0.0417
 # size for menus
 menuSizeX = sizeX * 0.5
 menuSizeY = sizeY * 0.5
@@ -23,8 +34,6 @@ pygame.display.set_caption('The Amazing T-rex Runner', 'The Amazing T-rex Game')
 
 # TODO: maybe move all the menu code to a separate file for better organisation
 # menus
-# make font
-PressStartFont = pygame.font.Font(pathlib.Path('dependencies/font/PressStart2P-Regular.ttf'), 7)
 # menu theme
 menuTheme = pygame_menu.themes.Theme(
     background_color=(0, 0, 0, 0),
@@ -47,7 +56,6 @@ mainMenu = pygame_menu.Menu(
     menuSizeX, menuSizeY,
     theme=menuTheme,
     mouse_motion_selection=True,
-
 )
 # options menu
 optionsMenu = pygame_menu.menu.Menu(
@@ -55,7 +63,7 @@ optionsMenu = pygame_menu.menu.Menu(
     menuSizeX, menuSizeY,
     theme=menuTheme
 )
-
+# pause menu
 
 # make buttons for mainMenu
 # TODO: continue on menu layout and logic
@@ -78,13 +86,6 @@ optionsMenu.add.dropselect(
 )
 
 
-# draws menu background
-def draw_background():
-    # background = pygame.image.load(pathlib.Path('dependencies/images/Lorem_Ipsum.jpg'))
-    # background = pygame.transform.scale(background, (sizeX, sizeY))
-    # displayGame.blit(background, (0, 0))
-    displayGame.fill((255, 255, 255))
-
 # set textures according to menu
 # texturer.set_textures(textureName)
 # initial player state
@@ -93,6 +94,7 @@ def draw_background():
 # ground_begin = texturer.ground
 
 
+# TODO: make logic for beginning game
 while True:
     draw_background()
     events = pygame.event.get()

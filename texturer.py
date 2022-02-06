@@ -2,6 +2,7 @@ import pathlib
 import pygame, pygame_menu
 
 # TODO: finish the logic of setting setting textures give a specific folder
+# TODO: make function for animated objects either in this file or a new one
 # initialise variables
 player_init = "hello world"
 player_frame_1 = None
