@@ -5,31 +5,38 @@ import pygame
 import pygame_menu
 
 import logic
+from game import Game
 
-pygame.init()
+g = Game()
 clock = pygame.time.Clock()
 clockAbsolute = 0
 
 
 # draws menu background
 def draw_background():
-    background = pygame.image.load(pathlib.Path('dependencies/images/dino-game-background.png'))
+    background = pygame.image.load(pathlib.Path('../dependencies/images/dino-game-background.png'))
     background = pygame.transform.scale(background, (sizeX, sizeY))
-    displayGame.blit(background, (0, 0))
-    # displayGame.fill((255, 255, 255))
+    gameWindow.blit(background, (0, 0))
+    # gameDisplay.fill((255, 255, 255))
+
+
+def run_game():
+    print('f')
+    print(pygame_menu.menu.Menu.get_current(mainMenu))
 
 
 # basic variables
 # get screen size for different screen sizes
 user32 = ctypes.windll.user32
-screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-sizeX, sizeY = screensize
+sizeX = user32.GetSystemMetrics(0)
+sizeY = user32.GetSystemMetrics(1)
 sizeY = sizeY - sizeY * 0.0417
 # size for menus
 menuSizeX = sizeX * 0.5
 menuSizeY = sizeY * 0.5
 # initialise game window
-displayGame = pygame.display.set_mode((sizeX, sizeY), pygame.RESIZABLE)
+display = pygame.Surface((sizeX, sizeY))
+gameWindow = pygame.display.set_mode((sizeX, sizeY), pygame.RESIZABLE)
 pygame.display.set_caption('The Amazing T-rex Runner', 'The Amazing T-rex Game')
 
 # TODO: maybe move all the menu code to a separate file for better organisation
@@ -38,15 +45,16 @@ pygame.display.set_caption('The Amazing T-rex Runner', 'The Amazing T-rex Game')
 menuTheme = pygame_menu.themes.Theme(
     background_color=(0, 0, 0, 0),
     title_background_color=(0, 0, 0, 0),
-    title_font=(pathlib.Path('dependencies/font/PressStart2P-Regular.ttf')),
-    widget_font=(pathlib.Path('dependencies/font/PressStart2P-Regular.ttf')),
+    title_font=(pathlib.Path('../dependencies/font/PressStart2P-Regular.ttf')),
+    widget_font=(pathlib.Path('../dependencies/font/PressStart2P-Regular.ttf')),
     title_font_color=(38, 38, 38),
     widget_font_color=(38, 38, 38),
     selection_color=(10, 10, 10),
-    title_font_size=70,
+    title_font_size=80,
+    widget_font_size=50,
     widget_background_color=(0, 0, 0, 0),
     title_close_button_background_color=(10, 10, 10),
-    title_offset=(-100, 0),
+    title_offset=(0, 0),
     title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_UNDERLINE_TITLE,
     widget_alignment=pygame_menu.locals.ALIGN_LEFT,
 )
@@ -56,6 +64,7 @@ mainMenu = pygame_menu.Menu(
     menuSizeX, menuSizeY,
     theme=menuTheme,
     mouse_motion_selection=True,
+    position=(5, 10)
 )
 # options menu
 optionsMenu = pygame_menu.menu.Menu(
@@ -67,7 +76,8 @@ optionsMenu = pygame_menu.menu.Menu(
 
 # make buttons for mainMenu
 # TODO: continue on menu layout and logic
-mainMenu.add.button('Play', None)
+mainMenu.add.button('')
+mainMenu.add.button('Play', run_game())
 mainMenu.add.button('')
 mainMenu.add.button(optionsMenu.get_title(), optionsMenu)
 mainMenu.add.button('Quit', pygame_menu.events.EXIT)
@@ -84,7 +94,7 @@ optionsMenu.add.dropselect(
     font_size=30,
     onchange=logic.setmodifier
 )
-
+optionsMenu.add.button('Return to Main Menu', optionsMenu.close)
 
 # set textures according to menu
 # texturer.set_textures(textureName)
@@ -94,19 +104,20 @@ optionsMenu.add.dropselect(
 # ground_begin = texturer.ground
 
 
+
 # TODO: make logic for beginning game
 while True:
-    draw_background()
     events = pygame.event.get()
     clock.tick()
     clockAbsolute = clockAbsolute + clock.get_time()
+    draw_background()
 
     for event in events:
         if event.type == pygame.QUIT:
-            exit()
+            g.running, g.playing = False, False
 
     if mainMenu.is_enabled():
         mainMenu.update(events)
-        mainMenu.draw(displayGame)
+        mainMenu.draw(gameWindow)
 
     pygame.display.update()
