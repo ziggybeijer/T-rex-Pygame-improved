@@ -1,5 +1,6 @@
 import pygame, pygame_menu
 import texturer
+print('test')
 
 
 def setmodifier(text, difficulty_modifier):

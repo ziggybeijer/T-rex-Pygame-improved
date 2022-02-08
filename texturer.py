@@ -1,6 +1,7 @@
 import pathlib
 import pygame, pygame_menu
 
+print('test')
 # TODO: finish the logic of setting setting textures give a specific folder
 # TODO: make function for animated objects either in this file or a new one
 # initialise variables

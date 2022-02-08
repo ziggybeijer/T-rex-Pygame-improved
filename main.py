@@ -10,7 +10,7 @@ import logic
 pygame.init()
 clock = pygame.time.Clock()
 fps = 60
-
+print('test')
 # get screen size for different screen sizes
 user32 = ctypes.windll.user32
 # sizeX = user32.GetSystemMetrics(0)
