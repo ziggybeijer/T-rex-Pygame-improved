@@ -1,9 +1,8 @@
 import pygame, pygame_menu
 import texturer
-print('test')
 
 
-def setmodifier(text, difficulty_modifier):
+def setModifier(text, difficulty_modifier):
     # maths for difficulty
     print(text)
     if difficulty_modifier == 0:
@@ -13,6 +12,7 @@ def setmodifier(text, difficulty_modifier):
     print(difficulty_modifier)
     return difficulty_modifier
 # TODO: work on difficulty logic and how it affects speed and reward
+
 
 def setRewards(difficulty_modifier, time):
     if difficulty_modifier is not None:
