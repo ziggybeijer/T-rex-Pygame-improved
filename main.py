@@ -51,7 +51,7 @@ def scroll_background():
     displayGame.scroll(dx=0)
 
 
-def jumpFunc(location, ):
+def jumpFunc(location):
     for i in range(-10, 9):
         i = -2 * i
         location = location.move(0, -i)
@@ -90,7 +90,7 @@ def gameFunc():
                 if event.key == pygame.K_w:
                     DINO_LOCATION = jumpFunc(DINO_LOCATION)
                 if event.key == pygame.K_ESCAPE:
-                    running = False
+                    menuFunc()
 
         game_background()
 

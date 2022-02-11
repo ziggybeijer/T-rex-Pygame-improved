@@ -1,11 +1,42 @@
 import pathlib
-import pygame, pygame_menu
+import pygame
+
+
+class Texturer:
+    def __init__(self, filename):
+        self.RUNNING = [
+            pygame.image.load('Assets/{}/Dino/DinoRun1.png'.format(filename)),
+            pygame.image.load('Assets/{}/Dino/DinoRun2.png'.format(filename))
+        ]
+        self.DUCKING = [
+            pygame.image.load('Assets/{}/Dino/DinoDuck1.png'.format(filename)),
+            pygame.image.load('Assets/{}/Dino/DinoDuck2.png'.format(filename))
+        ]
+        self.JUMPING = pygame.image.load('Assets/{}/Dino/DinoJump.png'.format(filename))
+
+        self.SMALL_CACTI = [
+            pygame.image.load('Assets/{}/Cactus/SmallCactus1.png'.format(filename)),
+            pygame.image.load('Assets/{}/Cactus/SmallCactus2.png'.format(filename)),
+            pygame.image.load('Assets/{}/Cactus/SmallCactus3.png'.format(filename))
+        ]
+        self.LARGE_CACTI = [
+            pygame.image.load('Assets/{}/Cactus/LargeCactus1.png'.format(filename)),
+            pygame.image.load('Assets/{}/Cactus/LargeCactus2.png'.format(filename)),
+            pygame.image.load('Assets/{}/Cactus/LargeCactus3.png'.format(filename))
+        ]
+        self.BIRD = [
+            pygame.image.load('Assets/{}/Bird/Bird1.png'.format(filename)),
+            pygame.image.load('Assets/{}/Bird/Bird2.png'.format(filename))
+        ]
+
+        self.CLOUD = pygame.image.load('Assets/{}/Other/Cloud.png'.format(filename))
+        self.BG = pygame.image.load('Assets/{}/Other/Track.png'.format(filename))
+
 
 
 # TODO: finish the logic of setting setting textures give a specific folder
 # TODO: make function for animated objects either in this file or a new one
 # initialise variables
-player_init = "hello world"
 player_frame_1 = None
 player_frame_2 = None
 player_frame_3 = None

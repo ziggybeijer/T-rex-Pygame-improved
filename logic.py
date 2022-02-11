@@ -2,7 +2,7 @@ import pygame, pygame_menu
 import texturer
 
 
-def setModifier(text, difficulty_modifier):
+def setmodifier(text, difficulty_modifier):
     # maths for difficulty
     print(text)
     if difficulty_modifier == 0:
