@@ -16,6 +16,7 @@ SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Chrome Dino Runner")
 
 texture_file = 'base_game'
+
 textures = Texturer(texture_file)
 
 RUNNING = textures.RUNNING
@@ -94,8 +95,8 @@ class Dinosaur:
     def jump(self):
         self.image = self.jump_img
         if self.dino_jump:
-            self.dino_rect.y -= self.jump_vel * 4
-            self.jump_vel -= 0.8
+            self.dino_rect.y -= self.jump_vel * 2
+            self.jump_vel -= 0.4
         if self.jump_vel < - self.JUMP_VEL:
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
@@ -171,23 +172,23 @@ def main():
     clock = pygame.time.Clock()
     player = Dinosaur()
     cloud = Cloud()
-    game_speed = 20
+    game_speed = 10
     x_pos_bg = 0
     y_pos_bg = 380
     points = 0
-    font = pygame.font.Font('freesansbold.ttf', 20)
+    font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 20)
     obstacles = []
     death_count = 0
 
     def score():
         global points, game_speed
         points += 1
-        if points % 100 == 0:
+        if points % 200 == 0:
             game_speed += 1
 
         text = font.render("Points: " + str(points), True, (0, 0, 0))
         textRect = text.get_rect()
-        textRect.center = (1000, 40)
+        textRect.center = (950, 40)
         SCREEN.blit(text, textRect)
 
     def background():
@@ -204,6 +205,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                pygame.quit()
 
         SCREEN.fill((255, 255, 255))
         userInput = pygame.key.get_pressed()
@@ -223,7 +225,8 @@ def main():
             obstacle.draw(SCREEN)
             obstacle.update()
             if player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(2000)
+                pygame.display.update()
+                pygame.time.delay(500)
                 death_count += 1
                 menu(death_count)
 
@@ -234,7 +237,7 @@ def main():
 
         score()
 
-        clock.tick(30)
+        clock.tick(60)
         pygame.display.update()
 
 
@@ -243,7 +246,7 @@ def menu(death_count):
     run = True
     while run:
         SCREEN.fill((255, 255, 255))
-        font = pygame.font.Font('freesansbold.ttf', 30)
+        font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 30)
 
         if death_count == 0:
             text = font.render("Press any Key to Start", True, (0, 0, 0))
@@ -261,6 +264,7 @@ def menu(death_count):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                pygame.quit()
             if event.type == pygame.KEYDOWN:
                 main()
 

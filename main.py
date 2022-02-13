@@ -15,11 +15,82 @@ pygame.init()
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption('The T-rex Game')
 texture_file = 'base_game'
 game_textures = Texturer(texture_file)
 
 
+def mainLoop():
+    global game_speed, x_pos_bg, y_pos_bg, points, obstacles
+    run = True
+    clock = pygame.time.Clock()
+    game_speed = 20
+    x_pos_bg = 0
+    y_pos_bg = 380
+    points = 0
+    player = Dino(game_textures)
+    cloud = Cloud(SCREEN_WIDTH, game_speed, game_textures)
+    font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 20)
+    obstacles = []
+    death_count = 0
 
+    def score():
+        global points, game_speed
+        points += 1
+        if points % 100 == 0
+            game_speed += 1
+
+        text = font.render('Points: ' + str(points), True, (0, 0, 0))
+        textRect = text.get_rect()
+        textRect.center = (1000, 40)
+        SCREEN.blit(text, textRect)
+
+    def background():
+        global x_pos_bg, y_pos_bg
+        image_width = game_textures.BG.get_width()
+        SCREEN.blit(game_textures.BG, (x_pos_bg, y_pos_bg))
+        SCREEN.blit(game_textures.BG, (image_width + x_pos_bg, y_pos_bg))
+        if x_pos_bg <= -image_width:
+            SCREEN.blit(game_textures.BG, (image_width + x_pos_bg, y_pos_bg))
+            x_pos_bg = 0
+        x_pos_bg -= game_speed
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+
+        SCREEN.fill((255, 255, 255))
+        userInput = pygame.key.get_pressed()
+
+        player.draw(SCREEN)
+        player.update(userInput)
+
+        if len(obstacles) == 0:
+            if random.randint(0, 2) == 0:
+                obstacles.append(SmallCactus(game_textures.SMALL_CACTI, SCREEN_WIDTH))
+            elif random.randint(0, 2) == 1:
+                obstacles.append(LargeCactus(game_textures.LARGE_CACTI, SCREEN_WIDTH))
+            elif random.randint(0, 2) == 2:
+                obstacles.append(Bird(game_textures.BIRD, SCREEN_WIDTH))
+
+        for obstacle in obstacles:
+            obstacle.draw(SCREEN)
+            obstacle.update(game_speed, obstacles)
+            if player.dino_rect.colliderect(obstacle.rect):
+                pygame.time.delay(500)
+                death_count += 1
+                #menu(death_count)
+
+        background()
+
+        cloud.draw(SCREEN)
+        cloud.update()
+
+        score()
+
+        clock.tick(60)
+        pygame.display.update()
 
 
 
@@ -49,12 +120,6 @@ user32 = ctypes.windll.user32
 # sizeY = user32.GetSystemMetrics(1)
 # sizeY = sizeY - sizeY * 0.0417
 sizeX, sizeY = 1200, 800
-# size for menus
-menuSizeX = sizeX * 0.5
-menuSizeY = sizeY * 0.5
-# initialise game window
-displayGame = pygame.display.set_mode((sizeX, sizeY), pygame.RESIZABLE)
-pygame.display.set_caption('The Amazing T-rex Runner', 'The Amazing T-rex Game')
 
 # the 0,0 coord starts at the top left
 DINO_LOCATION = pygame.Rect(50, 300, 75, 175)   # variables are (x-coords, y-coords, width, height)
@@ -108,38 +173,6 @@ def menuFunc():
 
         clock.tick()
         pygame.display.update()
-
-
-def gameFunc():
-    running = True
-    game_background()
-    global DINO_LOCATION
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
-                    DINO_LOCATION = jumpFunc(DINO_LOCATION)
-                if event.key == pygame.K_ESCAPE:
-                    menuFunc()
-
-        game_background()
-
-        pygame.draw.rect(displayGame, (255, 0, 0), GROUND_LOCATION)
-        pygame.draw.rect(displayGame, (255, 255, 255), DINO_LOCATION)
-        clock.tick(fps)
-        pygame.display.update()
-
-
-def scrollFunc():
-    while True:
-        scroll_background()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exit(5)
-        pygame.display.update()
-
 
 # TODO: maybe move all the menu code to a separate file for better organisation
 

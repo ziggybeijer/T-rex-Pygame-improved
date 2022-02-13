@@ -33,5 +33,3 @@ class Texturer:
         self.CLOUD = pygame.image.load('Assets/{}/Other/Cloud.png'.format(filename))
         self.BG = pygame.image.load('Assets/{}/Other/Track.png'.format(filename))
 
-
-

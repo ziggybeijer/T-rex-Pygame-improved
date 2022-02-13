@@ -20,23 +20,23 @@ class Obstacle:
 
 
 class SmallCactus(Obstacle):
-    def __init__(self, image):
+    def __init__(self, image, screen_width):
         self.type = random.randint(0, 2)
-        super().__init__(image, self.type)
+        super().__init__(image, self.type, screen_width)
         self.rect.y = 325
 
 
 class LargeCactus(Obstacle):
-    def __init__(self, image):
+    def __init__(self, image, screen_width):
         self.type = random.randint(0, 2)
-        super().__init__(image, self.type)
+        super().__init__(image, self.type, screen_width)
         self.rect.y = 300
 
 
 class Bird(Obstacle):
-    def __init__(self, image):
+    def __init__(self, image, screen_width):
         self.type = 0
-        super().__init__(image, self.type)
+        super().__init__(image, self.type, screen_width)
         self.rect.y = 250
         self.index = 0
 
