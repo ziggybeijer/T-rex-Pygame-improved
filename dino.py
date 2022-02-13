@@ -61,3 +61,6 @@ class Dino:
         if self.jump_vel < -self.JUMP_VEL:
             self.jumping = False
             self.jump_vel = self.JUMP_VEL
+
+    def draw(self, SCREEN):
+        SCREEN.blit(self.image[self.type], self.dino_rect)
