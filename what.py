@@ -1,7 +1,4 @@
-import datetime
-import os
 import random
-import threading
 from texturer import Texturer
 import pygame
 

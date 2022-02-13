@@ -2,6 +2,7 @@ import pygame
 import pygame_gui
 
 
+# houses the functions for the menus
 class Menu:
     def __init__(self):
         pass

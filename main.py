@@ -2,13 +2,10 @@ import ctypes
 import pathlib
 import pygame
 import pygame_gui
-import pygame_menu
 from dino import Dino
 from cloud import Cloud
-from game import Game
 from obstacles import *
 from texturer import Texturer
-import logic
 
 pygame.init()
 
@@ -92,7 +89,8 @@ def mainLoop():
         clock.tick(60)
         pygame.display.update()
 
-
+# TODO: clean up this file and make a primitive menu function
+# TODO: make and implement the other menu functions
 
 
 

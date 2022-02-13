@@ -2,7 +2,7 @@ import pathlib
 import pygame
 
 
-# Set textures for game
+# Set the object that houses the textures for the game
 class Texturer:
     def __init__(self, filename):
         self.RUNNING = [

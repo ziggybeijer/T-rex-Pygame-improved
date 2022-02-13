@@ -2,7 +2,7 @@ import pygame
 import random
 
 
-# creates and handles the obstacles objects
+# handling functions for the obstacle objects
 class Obstacle:
     def __init__(self, image, type, screen_width):
         self.image = image
@@ -19,6 +19,7 @@ class Obstacle:
         SCREEN.blit(self.image[self.type], self.rect)
 
 
+# creates the different obstacle objects
 class SmallCactus(Obstacle):
     def __init__(self, image, screen_width):
         self.type = random.randint(0, 2)
