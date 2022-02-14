@@ -89,10 +89,27 @@ def mainLoop():
         clock.tick(60)
         pygame.display.update()
 
-# TODO: clean up this file and make a primitive menu function
+# TODO: clean up this file and make menu functions with their own lööps
 # TODO: make and implement the other menu functions
 
-
+def pauseMenu():
+    run = True
+    while run:
+        SCREEN.fill((255, 255, 255))
+        font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 30)
+        text = font.render('Press Arrow up or W to Start', True, (0, 0, 0))
+        textRect = text.get_rect()
+        textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 20)
+        SCREEN.blit(text, textRect)
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    mainLoop()
+                if event.key ==
 
 
 
