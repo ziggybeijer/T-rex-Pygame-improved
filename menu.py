@@ -20,7 +20,7 @@ class Menu:
         pass
 
     @staticmethod
-    def pauseMenu(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT):
+    def pauseMenu(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, main):
         run = True
         while run:
             SCREEN.fill((255, 255, 255))
@@ -37,5 +37,6 @@ class Menu:
                     pygame.quit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
+                        quit()
 
 
