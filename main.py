@@ -1,5 +1,3 @@
-import ctypes
-import pathlib
 import pygame
 import pygame_gui
 from dino import Dino
@@ -8,7 +6,6 @@ from obstacles import *
 from texturer import Texturer
 
 pygame.init()
-
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -77,7 +74,7 @@ def mainLoop():
             if player.dino_rect.colliderect(obstacle.rect):
                 pygame.time.delay(500)
                 death_count += 1
-                #menu(death_count)
+                # menu(death_count)
 
         background()
 
@@ -128,5 +125,3 @@ def textureMenu():
 def deathMenu():
     pass
 
-
-# TODO: maybe move all the menu code to a separate file for better organisation
