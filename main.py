@@ -9,15 +9,31 @@ pygame.init()
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+background_image = pygame.image.load('Assets/images/dino-game-background.png')
+background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('The T-rex Game')
 texture_file = 'base_game'
 game_textures = Texturer(texture_file)
+clock = pygame.time.Clock()
 
 
-def mainLoop():
+def draw_text_topleft(text, font, color, surface, x, y):
+    textobj = font.render(text, True, color)
+    textRect = textobj.get_rect()
+    textRect.topleft = (x, y)
+    surface.blit(textobj, textRect)
+
+
+def draw_text(text, font, color, surface, x, y):
+    textobj = font.render(text, True, color)
+    textRect = textobj.get_rect()
+    textRect.center = (x, y)
+    surface.blit(textobj, textRect)
+
+
+def mainLoop(): # the loop that plays the game
     global game_speed, x_pos_bg, y_pos_bg, points, obstacles
     run = True
-    clock = pygame.time.Clock()
     game_speed = 20
     x_pos_bg = 0
     y_pos_bg = 380
@@ -34,10 +50,7 @@ def mainLoop():
         if points % 100 == 0:
             game_speed += 1
 
-        text = font.render('Points: ' + str(points), True, (0, 0, 0))
-        textRect = text.get_rect()
-        textRect.center = (1000, 40)
-        SCREEN.blit(text, textRect)
+        draw_text(('Points :' + str(points)), font, (0, 0, 0), SCREEN, 1000, 40)
 
     def background():
         global x_pos_bg, y_pos_bg
@@ -89,7 +102,8 @@ def mainLoop():
 # TODO: clean up this file and make menu functions with their own lööps
 # TODO: make and implement the other menu functions
 
-def pauseMenu():
+
+def pauseMenu(): # right now a barebones copy of what is in what.py
     run = True
     while run:
         SCREEN.fill((255, 255, 255))
@@ -102,16 +116,31 @@ def pauseMenu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-                pygame.quit()
+                exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     mainLoop()
                 if event.key == pygame.K_w:
                     mainLoop()
 
+        clock.tick(60)
+        pygame.display.update()
 
-def mainMenu():
-    pass
+
+def mainMenu(): # has to become the true main menu, that goes to all the otehr loops
+    run = True
+    while run:
+        SCREEN.blit(background_image, (0, 0))
+        title_font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 20)
+        draw_text_topleft("The T-Rex Runner Game", title_font, (50, 50, 50), SCREEN, 100, 50)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                exit()
+
+        clock.tick(60)
+        pygame.display.update()
 
 
 def optionsMenu():
@@ -125,3 +154,10 @@ def textureMenu():
 def deathMenu():
     pass
 
+
+# define assets used in menu's
+
+
+
+
+mainMenu()
