@@ -65,12 +65,13 @@ def mainLoop(): # the loop that plays the game
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-                pygame.quit()
+                exit()
 
         SCREEN.fill((255, 255, 255))
         userInput = pygame.key.get_pressed()
 
         player.draw(SCREEN)
+        print(player.dino_rect)
         player.update(userInput)
 
         if len(obstacles) == 0:
@@ -96,7 +97,7 @@ def mainLoop(): # the loop that plays the game
 
         score()
 
-        clock.tick(60)
+        clock.tick(30)
         pygame.display.update()
 
 # TODO: clean up this file and make menu functions with their own lööps
@@ -160,4 +161,4 @@ def deathMenu():
 
 
 
-mainMenu()
+mainLoop()
