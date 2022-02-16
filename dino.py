@@ -32,9 +32,9 @@ class Dino:
         if self.step_index >= 10:
             self.step_index = 0
 
-        if (userInput[pygame.K_UP] or userInput[pygame.K_w]) and not self.jumping:
+        if userInput[pygame.K_UP] and not self.jumping:
             self.running, self.ducking, self.jumping = False, False, True
-        elif (userInput[pygame.K_DOWN] or userInput[pygame.K_s]) and not self.jumping:
+        elif userInput[pygame.K_DOWN] and not self.jumping:
             self.running, self.ducking, self.jumping = False, True, False
         elif not (self.jumping and self.ducking):
             self.running, self.ducking, self.jumping = True, False, False
