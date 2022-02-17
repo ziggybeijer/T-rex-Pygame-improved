@@ -42,7 +42,7 @@ class Dino:
             self.ducking = True
             self.jumping = False
         elif not (self.jumping or (userInput[pygame.K_s] or userInput[pygame.K_DOWN] or userInput[pygame.KMOD_SHIFT])):
-            self.running  = True
+            self.running = True
             self.ducking = False
             self.jumping = False
 

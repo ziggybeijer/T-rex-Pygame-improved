@@ -8,7 +8,7 @@ from texturer import Texturer
 pygame.init()
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
-SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
 background_image = pygame.image.load('Assets/images/dino-game-background.png')
 background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('The T-rex Game')
@@ -103,8 +103,10 @@ def mainLoop(): # the loop that plays the game
         clock.tick(60)
         pygame.display.update()
 
-# TODO: clean up this file and make menu functions with their own lööps
+# TODO: make menu functions with their own lööps
 # TODO: make and implement the other menu functions
+# TODO: difficulty, powerups and texture select
+# TODO: very unlikely: pvp
 
 
 def pauseMenu(): # right now a barebones copy of what is in what.py
@@ -163,5 +165,5 @@ def deathMenu():
 
 
 
-
-mainLoop()
+mainMenu()
+# mainLoop()
