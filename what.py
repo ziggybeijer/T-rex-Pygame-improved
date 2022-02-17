@@ -99,6 +99,7 @@ class Dinosaur:
             self.jump_vel = self.JUMP_VEL
 
     def draw(self, SCREEN):
+        print(self.dino_rect)
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
 
@@ -245,7 +246,7 @@ def draw_text_center(text, font, color, surface, x, y):
     surface.blit(textobj, textRect)
 
 
-def menu(death_count):
+def menu():
     global points
     run = True
     while run:
@@ -266,4 +267,4 @@ def menu(death_count):
                     main()
 
 
-menu(death_count=0)
+menu()

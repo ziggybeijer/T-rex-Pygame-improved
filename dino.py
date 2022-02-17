@@ -10,6 +10,7 @@ class Dino:
 
     def __init__(self, textures):
         self.running, self.ducking, self.jumping = True, False, False
+
         self.run_img = textures.RUNNING
         self.duck_img = textures.DUCKING
         self.jump_img = textures.JUMPING
@@ -32,12 +33,18 @@ class Dino:
         if self.step_index >= 10:
             self.step_index = 0
 
-        if userInput[pygame.K_UP] and not self.jumping:
-            self.running, self.ducking, self.jumping = False, False, True
-        elif userInput[pygame.K_DOWN] and not self.jumping:
-            self.running, self.ducking, self.jumping = False, True, False
-        elif not (self.jumping and self.ducking):
-            self.running, self.ducking, self.jumping = True, False, False
+        if (userInput[pygame.K_w] or userInput[pygame.K_UP] or userInput[pygame.K_SPACE]) and not self.jumping:
+            self.running = False
+            self.ducking = False
+            self.jumping = True
+        elif (userInput[pygame.K_s] or userInput[pygame.K_DOWN] or userInput[pygame.KMOD_SHIFT]) and not self.jumping:
+            self.running = False
+            self.ducking = True
+            self.jumping = False
+        elif not (self.jumping or (userInput[pygame.K_s] or userInput[pygame.K_DOWN] or userInput[pygame.KMOD_SHIFT])):
+            self.running  = True
+            self.ducking = False
+            self.jumping = False
 
     def run(self):
         self.image = self.run_img[self.step_index // 5]
@@ -56,11 +63,12 @@ class Dino:
     def jump(self):
         self.image = self.jump_img
         if self.jumping:
-            self.dino_rect.y -= self.jump_vel * 4
-            self.jump_vel -= 0.8
+            self.dino_rect.y -= self.jump_vel * 2
+            self.jump_vel -= 0.4
         if self.jump_vel < -self.JUMP_VEL:
             self.jumping = False
             self.jump_vel = self.JUMP_VEL
 
     def draw(self, SCREEN):
+        # print(self.dino_rect)
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))

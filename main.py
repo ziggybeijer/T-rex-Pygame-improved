@@ -34,7 +34,7 @@ def draw_text(text, font, color, surface, x, y):
 def mainLoop(): # the loop that plays the game
     global game_speed, x_pos_bg, y_pos_bg, points, obstacles
     run = True
-    game_speed = 20
+    game_speed = 10
     x_pos_bg = 0
     y_pos_bg = 380
     points = 0
@@ -48,7 +48,7 @@ def mainLoop(): # the loop that plays the game
         global points, game_speed
         points += 1
         if points % 100 == 0:
-            game_speed += 1
+            game_speed += 0.3
 
         draw_text(('Points :' + str(points)), font, (0, 0, 0), SCREEN, 1000, 40)
 
@@ -66,12 +66,14 @@ def mainLoop(): # the loop that plays the game
             if event.type == pygame.QUIT:
                 run = False
                 exit()
+            if event.type == pygame.KEYDOWN:
+                if pygame.key == pygame.K_UP:
+                    print('hey there')
 
         SCREEN.fill((255, 255, 255))
         userInput = pygame.key.get_pressed()
 
         player.draw(SCREEN)
-        print(player.dino_rect)
         player.update(userInput)
 
         if len(obstacles) == 0:
@@ -87,6 +89,7 @@ def mainLoop(): # the loop that plays the game
             obstacle.update(game_speed, obstacles)
             if player.dino_rect.colliderect(obstacle.rect):
                 pygame.time.delay(500)
+                exit(100)
                 death_count += 1
                 # menu(death_count)
 
@@ -97,7 +100,7 @@ def mainLoop(): # the loop that plays the game
 
         score()
 
-        clock.tick(30)
+        clock.tick(60)
         pygame.display.update()
 
 # TODO: clean up this file and make menu functions with their own lööps
