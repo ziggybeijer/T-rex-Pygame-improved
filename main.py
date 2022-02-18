@@ -6,15 +6,29 @@ from obstacles import *
 from texturer import Texturer
 
 pygame.init()
+# constants
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
+DIFFICULTY_SELECTOR = 1  # difficulty selector takes a numeric value, can be set via the menu
+POINT_SPEED_MODIFIER = 100  # POINT_SPEED_MODIFIER takes a numeric value, higher values speed up the game less
+POINT_GAIN_MODIFIER = 1  # POINT_GAIN_MODIFIER takes a numeric value, higher values give less points
+points = 0
+ghost_points = 0
+game_speed = 10
+x_pos_bg = 0
+y_pos_bg = 380
+obstacles = []
+# pygame constants
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
 background_image = pygame.image.load('Assets/images/dino-game-background.png')
 background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('The T-rex Game')
+title_font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 30)
+font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 20)
+clock = pygame.time.Clock()
+# texture file constants
 texture_file = 'base_game'
 game_textures = Texturer(texture_file)
-clock = pygame.time.Clock()
 
 
 def draw_text_topleft(text, font, color, surface, x, y):
@@ -31,26 +45,25 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(textobj, textRect)
 
 
-def mainLoop(): # the loop that plays the game
+def mainLoop():  # the loop that plays the game
     global game_speed, x_pos_bg, y_pos_bg, points, obstacles
     run = True
-    game_speed = 10
-    x_pos_bg = 0
-    y_pos_bg = 380
-    points = 0
     player = Dino(game_textures)
     cloud = Cloud(SCREEN_WIDTH, game_speed, game_textures)
-    font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 20)
-    obstacles = []
+    # font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 20)
     death_count = 0
 
     def score():
-        global points, game_speed
-        points += 1
-        if points % 100 == 0:
+        global points, game_speed, POINT_SPEED_MODIFIER, POINT_GAIN_MODIFIER, ghost_points
+        ghost_points += 1
+        if ghost_points == POINT_GAIN_MODIFIER and ghost_points != 0:
+            ghost_points -= POINT_GAIN_MODIFIER
+            points += 1
+        if points >= 500 and points % POINT_SPEED_MODIFIER == 0:
             game_speed += 0.3
+            print(game_speed)
 
-        draw_text(('Points :' + str(points)), font, (0, 0, 0), SCREEN, 1000, 40)
+        draw_text(('Points :' + str(points)), font, (0, 0, 0), SCREEN, 800, 40)
 
     def background():
         global x_pos_bg, y_pos_bg
@@ -67,14 +80,14 @@ def mainLoop(): # the loop that plays the game
                 run = False
                 exit()
             if event.type == pygame.KEYDOWN:
-                if pygame.key == pygame.K_UP:
-                    print('hey there')
+                if event.key == pygame.K_ESCAPE:
+                    exit(10)
 
         SCREEN.fill((255, 255, 255))
-        userInput = pygame.key.get_pressed()
+        user_input = pygame.key.get_pressed()
 
         player.draw(SCREEN)
-        player.update(userInput)
+        player.update(user_input)
 
         if len(obstacles) == 0:
             if random.randint(0, 2) == 0:
@@ -109,35 +122,32 @@ def mainLoop(): # the loop that plays the game
 # TODO: very unlikely: pvp
 
 
-def pauseMenu(): # right now a barebones copy of what is in what.py
+def pauseMenu():  # right now a barebones copy of what is in what.py
     run = True
     while run:
-        SCREEN.fill((255, 255, 255))
-        font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 30)
-        text = font.render('Press Arrow up or W to Start', True, (0, 0, 0))
-        textRect = text.get_rect()
-        textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 20)
-        SCREEN.blit(text, textRect)
+        SCREEN.fill((200, 200, 200))
+        # font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 30)
+        text = font.render('Press Any Key To Resume', True, (0, 0, 0))
+        text_rect = text.get_rect()
+        text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 20)
+        SCREEN.blit(text, text_rect)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    mainLoop()
-                if event.key == pygame.K_w:
-                    mainLoop()
+                mainLoop()
 
         clock.tick(60)
         pygame.display.update()
 
 
-def mainMenu(): # has to become the true main menu, that goes to all the otehr loops
+def mainMenu():  # has to become the true main menu, that goes to all the otehr loops
     run = True
     while run:
         SCREEN.blit(background_image, (0, 0))
-        title_font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 20)
+        # title_font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 20)
         draw_text_topleft("The T-Rex Runner Game", title_font, (50, 50, 50), SCREEN, 100, 50)
 
         for event in pygame.event.get():
@@ -161,9 +171,42 @@ def deathMenu():
     pass
 
 
-# define assets used in menu's
+# difficulty
+def set_modifier(selection_input):
+    global DIFFICULTY_SELECTOR, POINT_SPEED_MODIFIER, POINT_GAIN_MODIFIER
+    if selection_input == 1:  # easy difficulty?
+        DIFFICULTY_SELECTOR = 1
+        POINT_SPEED_MODIFIER = 400
+        POINT_GAIN_MODIFIER = 10
+    elif selection_input == 2:
+        DIFFICULTY_SELECTOR = 2
+        POINT_SPEED_MODIFIER = 200
+        POINT_GAIN_MODIFIER = 5
+    elif selection_input == 0:
+        DIFFICULTY_SELECTOR = 1
+        POINT_SPEED_MODIFIER = 100
+        POINT_GAIN_MODIFIER = 1
 
 
+# set different textures as texture file
+def set_textures(filename):  # simple function to change the textures the game uses
+    global game_textures
+    game_textures = Texturer(filename)
 
-mainMenu()
+
+# coin system functions
+def save_coins():
+    pass
+
+
+def gain_coins():
+    pass
+
+
+def spend_coins():
+    pass
+
+
+# mainMenu()
 # mainLoop()
+pauseMenu()
