@@ -33,16 +33,23 @@ game_textures = Texturer(texture_file)
 
 def draw_text_topleft(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
-    textRect = textobj.get_rect()
-    textRect.topleft = (x, y)
-    surface.blit(textobj, textRect)
+    text_rect = textobj.get_rect()
+    text_rect.topleft = (x, y)
+    surface.blit(textobj, text_rect)
+
+
+def draw_text_topright(text, font, color, surface, x, y):
+    textobj = font.render(text, True, color)
+    text_rect = textobj.get_rect()
+    text_rect.topright = (x, y)
+    surface.blit(textobj, text_rect)
 
 
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
-    textRect = textobj.get_rect()
-    textRect.center = (x, y)
-    surface.blit(textobj, textRect)
+    text_rect = textobj.get_rect()
+    text_rect.center = (x, y)
+    surface.blit(textobj, text_rect)
 
 
 def mainLoop():  # the loop that plays the game
