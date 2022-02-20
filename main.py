@@ -57,7 +57,6 @@ def mainLoop():  # the loop that plays the game
     run = True
     player = Dino(game_textures)
     cloud = Cloud(SCREEN_WIDTH, game_speed, game_textures)
-    # font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 20)
     death_count = 0
 
     def score():
@@ -111,6 +110,7 @@ def mainLoop():  # the loop that plays the game
                 pygame.time.delay(500)
                 exit(100)
                 death_count += 1
+                pauseMenu()
                 # menu(death_count)
 
         background()
