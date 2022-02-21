@@ -1,0 +1,12 @@
+{
+  "currency": {
+    "coins": 10
+  },
+  "textures": [
+    {
+      "texture_name": "base_game",
+      "texture_unlocked": true,
+      "texture_price": 100
+    }
+  ]
+}

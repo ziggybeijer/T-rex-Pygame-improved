@@ -4,16 +4,19 @@ from dino import Dino
 from cloud import Cloud
 from obstacles import *
 from texturer import Texturer
+import json
 
 pygame.init()
-# constants
+# constants and preset variables
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
-DIFFICULTY_SELECTOR = 1  # difficulty selector takes a numeric value, can be set via the menu
-POINT_SPEED_MODIFIER = 100  # POINT_SPEED_MODIFIER takes a numeric value, higher values speed up the game less
-POINT_GAIN_MODIFIER = 1  # POINT_GAIN_MODIFIER takes a numeric value, higher values give less points
+DIFFICULTY_SELECTOR = 2  # difficulty selector takes a numeric value, can be set via the menu
+POINT_SPEED_MODIFIER = 400  # POINT_SPEED_MODIFIER takes a numeric value, higher values speed up the game less
+POINT_GAIN_MODIFIER = 5  # POINT_GAIN_MODIFIER takes a numeric value, higher values give less points
+GAME_SPEED_MODIFIER = 0.4
 points = 0
 ghost_points = 0
+coin_cache = 0
 game_speed = 10
 x_pos_bg = 0
 y_pos_bg = 380
@@ -60,16 +63,18 @@ def mainLoop():  # the loop that plays the game
     death_count = 0
 
     def score():
-        global points, game_speed, POINT_SPEED_MODIFIER, POINT_GAIN_MODIFIER, ghost_points
+        global points, game_speed, POINT_SPEED_MODIFIER, POINT_GAIN_MODIFIER, GAME_SPEED_MODIFIER, ghost_points, coin_cache
         ghost_points += 1
         if ghost_points == POINT_GAIN_MODIFIER and ghost_points != 0:
             ghost_points -= POINT_GAIN_MODIFIER
             points += 1
-        if points >= 500 and points % POINT_SPEED_MODIFIER == 0:
-            game_speed += 0.3
+        if points % POINT_SPEED_MODIFIER == 0:
+            game_speed += GAME_SPEED_MODIFIER
             print(game_speed)
+        if points % 100 == 0:
+            coin_cache += 1
 
-        draw_text(('Points :' + str(points)), font, (0, 0, 0), SCREEN, 800, 40)
+        draw_text_topright(('Points :' + str(points)), font, (0, 0, 0), SCREEN, 1000, 40)
 
     def background():
         global x_pos_bg, y_pos_bg
@@ -180,19 +185,22 @@ def deathMenu():
 
 # difficulty
 def set_modifier(selection_input):
-    global DIFFICULTY_SELECTOR, POINT_SPEED_MODIFIER, POINT_GAIN_MODIFIER
+    global DIFFICULTY_SELECTOR, POINT_SPEED_MODIFIER, POINT_GAIN_MODIFIER, GAME_SPEED_MODIFIER
     if selection_input == 1:  # easy difficulty?
         DIFFICULTY_SELECTOR = 1
         POINT_SPEED_MODIFIER = 400
-        POINT_GAIN_MODIFIER = 10
+        POINT_GAIN_MODIFIER = 5
+        GAME_SPEED_MODIFIER = 0.4
     elif selection_input == 2:
         DIFFICULTY_SELECTOR = 2
         POINT_SPEED_MODIFIER = 200
-        POINT_GAIN_MODIFIER = 5
-    elif selection_input == 0:
-        DIFFICULTY_SELECTOR = 1
+        POINT_GAIN_MODIFIER = 3
+        GAME_SPEED_MODIFIER = 0.8
+    elif selection_input == 3:
+        DIFFICULTY_SELECTOR = 3
         POINT_SPEED_MODIFIER = 100
         POINT_GAIN_MODIFIER = 1
+        GAME_SPEED_MODIFIER = 0.8
 
 
 # set different textures as texture file
@@ -203,7 +211,19 @@ def set_textures(filename):  # simple function to change the textures the game u
 
 # coin system functions
 def save_coins():
-    pass
+    data_file = open('data.json', 'r+')
+    json_data = json.load(data_file)
+    coin_data = json_data['currency']
+    print(json_data)
+    print(coin_data)
+    coin_data['coins'] = 10
+    print(coin_data)
+    json_data['currency'] = coin_data
+    print(json_data)
+    data_file.seek(0)
+    data_file.truncate()
+    json.dump(json_data, data_file, indent=2)
+    data_file.close()
 
 
 def gain_coins():
@@ -216,4 +236,5 @@ def spend_coins():
 
 # mainMenu()
 # mainLoop()
-pauseMenu()
+# pauseMenu()
+save_coins()
