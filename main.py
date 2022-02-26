@@ -10,10 +10,10 @@ pygame.init()
 # constants and preset variables
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
-DIFFICULTY_SELECTOR = 2  # difficulty selector takes a numeric value, can be set via the menu
-POINT_SPEED_MODIFIER = 400  # POINT_SPEED_MODIFIER takes a numeric value, higher values speed up the game less
-POINT_GAIN_MODIFIER = 5  # POINT_GAIN_MODIFIER takes a numeric value, higher values give less points
-GAME_SPEED_MODIFIER = 0.4
+DIFFICULTY_SELECTOR = 3  # difficulty selector takes a numeric value, can be set via the menu
+POINT_SPEED_MODIFIER = 100  # POINT_SPEED_MODIFIER takes a numeric value, higher values speed up the game less
+POINT_GAIN_MODIFIER = 1  # POINT_GAIN_MODIFIER takes a numeric value, higher values give less points
+GAME_SPEED_MODIFIER = 0.8
 points = 0
 ghost_points = 0
 coin_cache = 0
@@ -68,7 +68,7 @@ def mainLoop():  # the loop that plays the game
         if ghost_points == POINT_GAIN_MODIFIER and ghost_points != 0:
             ghost_points -= POINT_GAIN_MODIFIER
             points += 1
-        if points % POINT_SPEED_MODIFIER == 0:
+        if points >= 100 and points % POINT_SPEED_MODIFIER == 0 and ghost_points == 0:
             game_speed += GAME_SPEED_MODIFIER
             print(game_speed)
         if points % 100 == 0:
@@ -191,12 +191,12 @@ def set_modifier(selection_input):
         POINT_SPEED_MODIFIER = 400
         POINT_GAIN_MODIFIER = 5
         GAME_SPEED_MODIFIER = 0.4
-    elif selection_input == 2:
+    elif selection_input == 2:  # medium mode
         DIFFICULTY_SELECTOR = 2
         POINT_SPEED_MODIFIER = 200
         POINT_GAIN_MODIFIER = 3
         GAME_SPEED_MODIFIER = 0.8
-    elif selection_input == 3:
+    elif selection_input == 3:  # hardmode
         DIFFICULTY_SELECTOR = 3
         POINT_SPEED_MODIFIER = 100
         POINT_GAIN_MODIFIER = 1
@@ -210,13 +210,13 @@ def set_textures(filename):  # simple function to change the textures the game u
 
 
 # coin system functions
-def save_coins():
+def save_coins(gained_coins):
     data_file = open('data.json', 'r+')
     json_data = json.load(data_file)
     coin_data = json_data['currency']
     print(json_data)
     print(coin_data)
-    coin_data['coins'] = 10
+    coin_data['coins'] = gained_coins
     print(coin_data)
     json_data['currency'] = coin_data
     print(json_data)
@@ -237,4 +237,4 @@ def spend_coins():
 # mainMenu()
 # mainLoop()
 # pauseMenu()
-save_coins()
+save_coins(0)
