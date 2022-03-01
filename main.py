@@ -29,7 +29,7 @@ pygame.display.set_caption('The T-rex Game')
 title_font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 30)
 font = pygame.font.Font('Assets/font/PressStart2P-Regular.ttf', 20)
 clock = pygame.time.Clock()
-# texture file constants
+# texture file constants/variables
 texture_file = 'base_game'
 game_textures = Texturer(texture_file)
 
@@ -56,14 +56,17 @@ def draw_text(text, font, color, surface, x, y):
 
 
 def mainLoop():  # the loop that plays the game
-    global game_speed, x_pos_bg, y_pos_bg, points, obstacles
+    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, coin_cache
+
     run = True
     player = Dino(game_textures)
     cloud = Cloud(SCREEN_WIDTH, game_speed, game_textures)
     death_count = 0
 
     def score():
-        global points, game_speed, POINT_SPEED_MODIFIER, POINT_GAIN_MODIFIER, GAME_SPEED_MODIFIER, ghost_points, coin_cache
+        global points, game_speed, POINT_SPEED_MODIFIER, POINT_GAIN_MODIFIER, GAME_SPEED_MODIFIER, ghost_points
+        global coin_cache
+
         ghost_points += 1
         if ghost_points == POINT_GAIN_MODIFIER and ghost_points != 0:
             ghost_points -= POINT_GAIN_MODIFIER
@@ -78,6 +81,7 @@ def mainLoop():  # the loop that plays the game
 
     def background():
         global x_pos_bg, y_pos_bg
+
         image_width = game_textures.BG.get_width()
         SCREEN.blit(game_textures.BG, (x_pos_bg, y_pos_bg))
         SCREEN.blit(game_textures.BG, (image_width + x_pos_bg, y_pos_bg))
@@ -113,6 +117,8 @@ def mainLoop():  # the loop that plays the game
             obstacle.update(game_speed, obstacles)
             if player.dino_rect.colliderect(obstacle.rect):
                 pygame.time.delay(500)
+                save_coins(coin_cache)
+                coin_cache = 0
                 exit(100)
                 death_count += 1
                 pauseMenu()
@@ -186,6 +192,7 @@ def deathMenu():
 # difficulty
 def set_modifier(selection_input):
     global DIFFICULTY_SELECTOR, POINT_SPEED_MODIFIER, POINT_GAIN_MODIFIER, GAME_SPEED_MODIFIER
+
     if selection_input == 1:  # easy difficulty?
         DIFFICULTY_SELECTOR = 1
         POINT_SPEED_MODIFIER = 400
@@ -204,37 +211,107 @@ def set_modifier(selection_input):
 
 
 # set different textures as texture file
-def set_textures(filename):  # simple function to change the textures the game uses
+def set_textures(filename):  # simple function to change the textures the game uses, still needs updating
     global game_textures
     game_textures = Texturer(filename)
 
 
+def check_textures():  # function to check if a texture is unlocked or not
+    pass
+
+
 # coin system functions
-def save_coins(gained_coins):
+def save_coins(gained_coins):  # saves hard-earned coins
+    data_file = open('data.json', 'r+')
+
+    json_data = json.load(data_file)
+    coin_data = json_data['currency']
+    old_coins = coin_data['coins']
+
+    gained_coins = gained_coins + old_coins
+    coin_data['coins'] = gained_coins
+
+    json_data['currency'] = coin_data
+
+    data_file.seek(0)
+    data_file.truncate()
+
+    json.dump(json_data, data_file, indent=2)
+    data_file.close()
+
+
+def spend_coins(coins_spent, json_data):
+    coin_data = json_data['currency']
+    old_coins = coin_data['coins']
+
+    old_coins = old_coins - coins_spent
+    coin_data['coins'] = old_coins
+    return coin_data
+
+
+def get_coins():
+    data_file = open('data.json', 'r+')
+
+    json_data = json.load(data_file)
+    coin_data = json_data['currency']
+    coins = coin_data['coins']
+
+    data_file.close()
+    return coins
+
+
+def buy_texture(bought_item):  # unlocks unlocked textures
+    global texture_file, game_textures, coin_cache
+
+    data_file = open('data.json', 'r+')
+    json_data = json.load(data_file)
+    texture_data = json_data['textures']
+
+    coins = get_coins()
+
+    total_textures = len(texture_data)
+    for i in range(0, total_textures):
+
+        texture = texture_data[i]
+        texture_name = texture['texture_name']
+        texture_unlocked = texture['texture_unlocked']
+        texture_price = texture['texture_price']
+
+        if bought_item == texture_name:
+
+            if not texture_unlocked:
+
+                if coins >= texture_price:
+
+                    texture_unlocked = True
+                    coins = spend_coins(texture_price, json_data)
+                    print(coins)
+                    texture['texture_unlocked'] = texture_unlocked
+                    texture_data[i] = texture
+                    json_data['textures'] = texture_data
+                    json_data['currency'] = coins
+
+    data_file.seek(0)
+    data_file.truncate()
+
+    json.dump(json_data, data_file, indent=2)
+    data_file.close()
+
+
+def reset_coins():
     data_file = open('data.json', 'r+')
     json_data = json.load(data_file)
     coin_data = json_data['currency']
-    print(json_data)
-    print(coin_data)
-    coin_data['coins'] = gained_coins
-    print(coin_data)
+    coin_data['coins'] = 0
     json_data['currency'] = coin_data
-    print(json_data)
     data_file.seek(0)
     data_file.truncate()
     json.dump(json_data, data_file, indent=2)
     data_file.close()
 
 
-def gain_coins():
-    pass
-
-
-def spend_coins():
-    pass
-
-
 # mainMenu()
 # mainLoop()
 # pauseMenu()
-save_coins(0)
+# save_coins(10)
+buy_texture('base_game')

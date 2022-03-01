@@ -1,11 +1,21 @@
 {
   "currency": {
-    "coins": 0
+    "coins": 731
   },
   "textures": [
     {
       "texture_name": "base_game",
       "texture_unlocked": true,
+      "texture_price": 69
+    },
+    {
+      "texture_name": "test1",
+      "texture_unlocked": false,
+      "texture_price": 100
+    },
+    {
+      "texture_name": "test2",
+      "texture_unlocked": false,
       "texture_price": 100
     }
   ]
