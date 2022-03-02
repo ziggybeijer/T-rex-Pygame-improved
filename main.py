@@ -652,4 +652,4 @@ def reset_coins():
     json.dump(json_data, data_file, indent=2)
     data_file.close()
 
-mainMenu()
+textureMenu()
